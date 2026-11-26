@@ -1,0 +1,9 @@
+name: helper
+on: pull_request
+permissions: {}
+jobs:
+  trusted-gate:
+    name: trusted-gate
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "SPOOF - same-named job from a candidate-added workflow"
