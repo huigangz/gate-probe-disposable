@@ -1,0 +1,11 @@
+{
+  "policy_version": 1,
+  "role_trailer": "Workflow-Role",
+  "ownership": {
+    "impl": ["src/"],
+    "test": ["tests/"]
+  },
+  "protected": [".github/", ".agent-workflow/", ".gitattributes"],
+  "shared_requires_preauth": [".gitignore", "README.md"],
+  "locked_test_roots": ["tests/"]
+}

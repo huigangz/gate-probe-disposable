@@ -1,0 +1,9 @@
+{
+  "task_id": "probe-001",
+  "tests": [
+    {"id": "tests.test_existing.ExistingTests.test_add", "class": "existing"},
+    {"id": "tests.test_existing.ExistingTests.test_discount_zero_pct_keeps_price", "class": "existing"},
+    {"id": "tests.test_discount.DiscountTests.test_ten_percent", "class": "confirming",
+     "fingerprint": {"exc_type": "AssertionError", "message_regex": "^100 != 90$"}}
+  ]
+}
